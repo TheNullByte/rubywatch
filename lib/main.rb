@@ -1,5 +1,5 @@
 #! /usr/bin/ruby
-require File.join(File.dirname(__FILE__), 'modules/conf.rb')
+Dir[File.dirname(__FILE__)+'/modules/*.rb'].each{|file| require file}
 
 include Config
 
