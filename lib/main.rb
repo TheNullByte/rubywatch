@@ -9,3 +9,5 @@ include Config
 vars = get_vars(File.join(File.dirname(__FILE__),'config/rubywatch.conf'))
 
 logFile = vars['LogFile']
+
+#IIS.parseFile(logFile)
