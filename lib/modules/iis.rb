@@ -1,6 +1,8 @@
 module IIS
   
   logFormat = "%snaredate %snarehost %snarelog %random %h %l %u %t \"%r\" %>s %b"
+  logKeys = logFormat
+  logFormat = logFormat.split(/\s+/)
   logTable = {
               '%snaredate' => '(\w{3}\s+\d{0,2}\s+\d{2}:\d{2}:\d{2})',
               '%snarehost' => '(\w*)',
@@ -14,13 +16,18 @@ module IIS
               '%>s' => '(\d{3})',
               '%b' => '(\d*)'
   }
-  keys = Array.new
-  logFormat = logFormat.gsub(/\s+/, '\s*')
-  logParse = logTable.each do |k,v|
-    if logFormat.sub!(k,v)
-      keys.push k
-    end
+  logParse = logFormat.map do |l|
+    l = logTable[l]
   end
+  logParse = Regexp.new(logParse.join('\s+'))
+  #puts logParse
+  #keys = Array.new
+  #logFormat = logFormat.gsub(/\s+/, '\s*')
+  #logParse = logTable.each do |k,v|
+  #  if logFormat.sub!(k,v)
+  #    keys.push k
+  # end
+  #end
 =begin
 def IIS.parseFile(file)
     IO.foreach(file) do |line|
@@ -39,5 +46,10 @@ IO.foreach('/var/log/remote') do |line|
   #random = line.match(Regexp.new(logTable['%random']))
   #something1 = line.match(Regexp.new(logTable['%l']))
   #something2 = line.match(Regexp.new(logTable['%u']))
-end
+  matches = line.match(logParse) || matches
+  
+  #puts logParse;
+  #puts linematches;exit;
+  #snare_date = linematches[logKeys.index("%snaredate")]
+  end
 end
